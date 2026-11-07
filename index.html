@@ -312,7 +312,12 @@ footer .watermark {
 <div id="sec-genetics" class="section">
   <h2 style="color:var(--primary);margin-bottom:16px;">🧬 遗传概率计算器</h2>
   <div class="calc-box">
-    <p style="margin-bottom:16px;color:var(--text-light);">输入双亲基因型，计算子代表型/基因型概率。支持一对等位基因（Aa型）和显性完全遗传模式。</p>
+    <p style="margin-bottom:16px;color:var(--text-light);">输入双亲基因型，计算子代表型/基因型概率。支持常染色体（Aa 型）与伴 X 隐性（色盲型）两种遗传模式。</p>
+    <label>遗传模式：</label>
+    <select id="calc-mode" onchange="updateCalcOptions()">
+      <option value="auto">常染色体（Aa 型）</option>
+      <option value="xlinked">伴 X 隐性（色盲，X^A/X^a）</option>
+    </select>
     <label>父本基因型：</label>
     <select id="calc-father">
       <option value="AA">AA（显性纯合）</option>
@@ -336,7 +341,7 @@ footer .watermark {
   <p style="color:var(--text-light);margin-bottom:16px;">左侧为术语，右侧为释义。点击左侧术语后点击右侧释义，配对正确则锁定，错误则闪烁。全部配对方可获得 ★ 标识。</p>
   <div style="display:flex;gap:12px;margin-bottom:12px;">
     <button style="background:var(--primary);color:#fff;border:none;padding:8px 16px;border-radius:8px;cursor:pointer;" onclick="initMatchGame()">重新开始</button>
-    <span id="match-score" style="font-weight:700;color:var(--primary);align-self:center;">已配对：0 / 5</span>
+    <span id="match-score" style="font-weight:700;color:var(--primary);align-self:center;">已配对：0 / 8</span>
   </div>
   <div class="match-grid" id="match-grid">
     <div id="match-left" style="display:flex;flex-direction:column;gap:8px;"></div>
@@ -425,6 +430,12 @@ footer .watermark {
 <div style="background:#fffbe6;border-left:4px solid #f5a623;padding:10px;margin:12px 0;font-size:14px">📅 2026-10-26 升级 · 【概念+2026-10-26】基因=有遗传效应的 DNA 片段；遗传信息指碱基排列顺序</div>
 
 <div style="background:#fffbe6;border-left:4px solid #f5a623;padding:10px;margin:12px 0;font-size:14px">📅 2026-10-27 升级 · 【调节+2026-10-27】下丘脑=体温/血糖/水盐调节中枢；垂体分泌促激素生长激素</div>
+
+<div style="background:#fffbe6;border-left:4px solid #f5a623;padding:10px;margin:12px 0;font-size:14px">📅 2026-11-02 升级 · 【进化+2026-11-02】自然选择决定进化方向；隔离是新物种形成的必要条件(生殖隔离)</div>
+
+<div style="background:#fffbe6;border-left:4px solid #f5a623;padding:10px;margin:12px 0;font-size:14px">📅 2026-11-03 升级 · 【基因工程+2026-11-03】限制酶识别特定序列切 DNA；DNA 连接酶连黏端，载体常用质粒</div>
+
+<div style="background:#fffbe6;border-left:4px solid #f5a623;padding:10px;margin:12px 0;font-size:14px">📅 2026-11-06 升级 · 【呼吸+2026-11-06】有氧呼吸第一阶段(糖酵解)在细胞质基质；第二三阶段在线粒体</div>
 </footer>
 
 <script>
@@ -609,10 +620,82 @@ var quizData = [
     explain: 'S 型曲线：初期资源充足增长慢，中期资源相对充足增长最快（K/2处），后期资源受限增长放缓趋于 K 值。K 值会随环境改变。'
   },
   {
-    prompt: '下列哪项属于非特异性免疫（先天免疫）？',
+    prompt: '下列关于非特异性免疫（先天免疫），哪项正确？',
     options: ['T 细胞介导的细胞免疫', '抗体介导的体液免疫', '皮肤和黏膜的物理屏障', '记忆细胞的二次应答'],
     correct: 2,
     explain: '非特异性免疫（先天免疫）包括第一道防线（皮肤/黏膜）和第二道防线（吞噬细胞/溶菌酶），不针对特定病原体。'
+  },
+  {
+    prompt: '减数分裂中，同源染色体分离与着丝粒分裂分别发生在哪个时期？',
+    options: ['减数第一次分裂后期和减数第二次分裂后期', '都在减数第一次分裂后期', '都在减数第二次分裂后期', '减数第二次分裂后期和减数第一次分裂后期'],
+    correct: 0,
+    explain: '减Ⅰ后期同源染色体分离移向两极（着丝粒不分裂，姐妹染色单体相连）；减Ⅱ后期着丝粒分裂、姐妹染色单体分开。这是减数分裂与有丝分裂的关键区别。'
+  },
+  {
+    prompt: '关于翻译过程的描述，正确的是？',
+    options: ['翻译场所是核糖体，模板是 mRNA', '模板是 DNA，场所在细胞核', 'tRNA 上的反密码子识别 mRNA 密码子，携带特定氨基酸', '真核细胞中转录与翻译同时同地发生'],
+    correct: 2,
+    explain: '翻译在核糖体上进行：mRNA 为模板，tRNA（反密码子与密码子配对）携带特定氨基酸。DNA 是转录的模板；真核细胞转录在核内、翻译在质中，不同步（原核生物可边转录边翻译）。'
+  },
+  {
+    prompt: '关于食物链与食物网，下列说法正确的是？',
+    options: ['食物链从生产者开始，分解者不进入食物链', '食物链可以从蝗虫（初级消费者）开始', '营养级越多，能量传递效率越高', '食物链都是孤立的，不能相互连接'],
+    correct: 0,
+    explain: '食物链从生产者（绿色植物）开始，到最高级消费者结束；分解者不进入食物链。能量传递效率（10%~20%）不随营养级数量增加；多条食物链彼此交错互相联系形成食物网。'
+  },
+  {
+    prompt: '疫苗注射预防传染病的原理是：',
+    options: ['减毒/片段病原体作抗原，刺激特异性免疫而不致病', '疫苗直接杀死体内细菌', '疫苗补充人体营养不足', '疫苗主要激活非特异性免疫'],
+    correct: 0,
+    explain: '疫苗是减毒/灭活病原体或其片段（抗原）：接种→刺激 B/T 细胞产生记忆细胞与抗体→真正病原体入侵时二次应答更快更强。减毒疫苗可引起极轻微应答但不致病。'
+  },
+  {
+    prompt: '丈夫 O 型血、妻子 AB 型血，其后代血型可能是：',
+    options: ['A 型或 B 型', 'O 型或 AB 型', '只有 O 型', '只有 AB 型'],
+    correct: 0,
+    explain: 'O 型 = ii，AB 型 = I^A I^B。后代：I^A i（A 型）与 I^B i（B 型）各 1/2，不会出现 O 型或 AB 型。体现多等位基因共显性与隐性关系。'
+  },
+  {
+    prompt: '关于细胞膜结构（流动镶嵌模型），正确的是？',
+    options: ['磷脂双分子层是基本支架，蛋白质分子镶在、嵌入、横跨其中', '膜是静态的刚性结构', '胆固醇是植物细胞膜成分', '细胞膜只含脂质，不含蛋白质'],
+    correct: 0,
+    explain: '流动镶嵌模型：磷脂双分子层构成基本支架，蛋白质分子镶在/嵌入/横跨膜中；动物细胞膜含胆固醇（植物没有）。磷脂与多数蛋白质可运动→膜具有流动性。'
+  },
+  {
+    prompt: '关于无氧呼吸，下列说法正确的是？',
+    options: ['人体细胞无氧呼吸产物是乳酸，不释放 CO₂', '多数植物细胞无氧呼吸产物是乳酸', '酵母菌无氧呼吸产物是乳酸', '无氧呼吸发生在线粒体中'],
+    correct: 0,
+    explain: '人体/动物细胞、马铃薯块茎、萝卜、甜菜块根：无氧呼吸→乳酸（不产 CO₂）；多数植物与酵母菌：→乙醇+CO₂。场所是细胞质基质，第一阶段糖酵解释放少量能量。'
+  },
+  {
+    prompt: '激素调节的共同特点是：',
+    options: ['微量高效、经体液运输、作用于靶器官靶细胞', '只由神经系统分泌', '都是蛋白质，口服会被胃消化', '作用于体内所有细胞'],
+    correct: 0,
+    explain: '激素：微量高效、随血液运输、与靶细胞上特异性受体结合。并非都是蛋白质：性激素属脂质，甲状腺激素是含碘氨基酸衍生物；有的激素水溶。'
+  },
+  {
+    prompt: '关于近亲繁殖，下列说法正确的是？',
+    options: ['不改变基因频率，但纯合子比例逐代增加', '近交会改变基因频率', '近交可以消灭所有隐性基因', '近交提高遗传多样性'],
+    correct: 0,
+    explain: '近交不改变基因频率，但隐性纯合子（aa）逐代增多，有害隐性基因更易表达→后代发病率上升（近交衰退），因此禁止近亲结婚。改变基因频率靠突变/选择/迁移/小样本漂变。'
+  },
+  {
+    prompt: '植物在光补偿点时：',
+    options: ['光合速率 = 呼吸速率，CO₂ 净交换为零', '光合作用停止', '呼吸作用停止', '净光合速率最大'],
+    correct: 0,
+    explain: '光补偿点：光合放 O₂ 量 = 呼吸耗 O₂ 量（净交换为零）。低于补偿点呼吸>光合；高于补偿点光合>呼吸（净光合为正）。'
+  },
+  {
+    prompt: '关于微生物，下列说法正确的是？',
+    options: ['真菌是真核生物（有核膜），细菌是原核生物', '细菌有完整的线粒体', '酸奶制作利用酵母菌厌氧发酵', '病毒可以独立生活'],
+    correct: 0,
+    explain: '真菌（霉菌/酵母菌/蘑菇）是真核生物：有核膜；细菌是原核生物：无核膜与除核糖体外的细胞器。酸奶=乳酸菌厌氧发酵产乳酸；酿酒/发面用酵母菌。病毒不能独立生活，必须寄生活细胞。'
+  },
+  {
+    prompt: '植物组织培养技术的细胞学基础是：',
+    options: ['细胞全能性：已分化细胞保留完整遗传信息', '基因重组', '细胞分化', '细胞生长'],
+    correct: 0,
+    explain: '已分化的植物细胞仍保留该物种全套遗传物质→适宜培养条件下可脱分化形成完整植株（细胞全能性）。这是体细胞杂交与快速繁殖的理论基础。'
   }
 ];
 var quizIndex = 0;
@@ -661,6 +744,13 @@ function showFeedback(text, correct) {
 function calcGenetics() {
   var f = document.getElementById('calc-father').value;
   var m = document.getElementById('calc-mother').value;
+  var mode = document.getElementById('calc-mode').value;
+  if (mode === 'xlinked') {
+    var xDiv = document.getElementById('calc-result');
+    xDiv.style.display = 'block';
+    xDiv.textContent = calcXLinked(f, m);
+    return;
+  }
   var fatherG = [f[0], f[1]];
   var motherG = [m[0], m[1]];
   var combos = [
@@ -721,19 +811,65 @@ function calcGenetics() {
   resultDiv.textContent = resultText;
 }
 
+// ========== X-linked Recessive (Colorblindness) Calculator ==========
+var xPhenoMap = {
+  'XAXA': 'X^A X^A (正常女)',
+  'XAXa': 'X^A X^a (携带者女, 表型正常)',
+  'XaXa': 'X^a X^a (色盲女)',
+  'XAY': 'X^A Y (正常男)',
+  'XaY': 'X^a Y (色盲男)'
+};
+function xLabel(g) {
+  return xPhenoMap[g] || g;
+}
+function calcXLinked(f, m) {
+  var fX = f === 'XAY' ? 'A' : 'a';
+  var mX = [m.charAt(1), m.charAt(3)];
+  var girls = ['X' + fX + 'X' + mX[0], 'X' + fX + 'X' + mX[1]];
+  var boys = ['X' + mX[0] + 'Y', 'X' + mX[1] + 'Y'];
+  var t = '';
+  t += '═══════════════════════════\n';
+  t += '  伴 X 隐性遗传（色盲）计算\n';
+  t += '═══════════════════════════\n\n';
+  t += '双亲：父 ' + xLabel(f) + ' × 母 ' + xLabel(m) + '\n\n';
+  t += '【子代】（各 25%）\n';
+  girls.forEach(function(g) { t += '  ' + g + '  →  ' + xPhenoMap[g] + '\n'; });
+  boys.forEach(function(g) { t += '  ' + g + '  →  ' + xPhenoMap[g] + '\n'; });
+  t += '\n💡 要点：色盲男（X^a Y）的 X^a 只来自母亲；\n';
+  t += '   色盲女（X^a X^a）的儿子全色盲、女儿全携带。\n';
+  t += '   色盲男 × 正常非携带女 → 儿子全正常，女儿全携带。';
+  return t;
+}
+function updateCalcOptions() {
+  var mode = document.getElementById('calc-mode').value;
+  var fSel = document.getElementById('calc-father');
+  var mSel = document.getElementById('calc-mother');
+  document.getElementById('calc-result').style.display = 'none';
+  if (mode === 'auto') {
+    fSel.innerHTML = '<option value="AA">AA（显性纯合）</option><option value="Aa" selected>Aa（杂合）</option><option value="aa">aa（隐性纯合）</option>';
+    mSel.innerHTML = '<option value="AA">AA（显性纯合）</option><option value="Aa" selected>Aa（杂合）</option><option value="aa">aa（隐性纯合）</option>';
+  } else {
+    fSel.innerHTML = '<option value="XAY">X^A Y（正常男）</option><option value="XaY">X^a Y（色盲男）</option>';
+    mSel.innerHTML = '<option value="XAXA">X^A X^A（正常女）</option><option value="XAXa" selected>X^A X^a（携带女）</option><option value="XaXa">X^a X^a（色盲女）</option>';
+  }
+}
+
 // ========== Concept Matching Game ==========
 var matchPairs = [
   { left: 'DNA', right: '脱氧核糖核酸，遗传物质' },
   { left: 'mRNA', right: '信使RNA，携带遗传信息到核糖体' },
   { left: 'tRNA', right: '转运RNA，携带特定氨基酸' },
   { left: '核糖体', right: '蛋白质合成的场所' },
-  { left: '中心体', right: '与动物细胞有丝分裂有关' }
+  { left: '中心体', right: '与动物细胞有丝分裂有关' },
+  { left: '溶酶体', right: '含水解酶，消化衰老损伤的自身结构' },
+  { left: '叶绿体', right: '光合作用场所，双膜+类囊体堆叠' },
+  { left: '乙酰胆碱', right: '最常见的兴奋性神经递质' }
 ];
-var matchState = { selected: null, matched: 0, total: 5, pairs: [] };
+var matchState = { selected: null, matched: 0, total: 8, pairs: [] };
 
 function initMatchGame() {
-  matchState = { selected: null, matched: 0, total: 5, pairs: [] };
-  document.getElementById('match-score').textContent = '已配对：0 / 5';
+  matchState = { selected: null, matched: 0, total: 8, pairs: [] };
+  document.getElementById('match-score').textContent = '已配对：0 / 8';
 
   var leftDiv = document.getElementById('match-left');
   var rightDiv = document.getElementById('match-right');
@@ -787,7 +923,7 @@ function selectMatchItem(el) {
         el.classList.add('matched');
         matchState.matched++;
         matchState.selected = null;
-        document.getElementById('match-score').textContent = '已配对：' + matchState.matched + ' / 5';
+        document.getElementById('match-score').textContent = '已配对：' + matchState.matched + ' / 8';
         if (matchState.matched === matchState.total) {
           setTimeout(function() {
             alert('🎉 全部配对成功！你已完成概念配对挑战！');
@@ -855,29 +991,46 @@ function selectTreeLevel(level, el) {
 // Initialize
 loadNextQuiz();
 initMatchGame();
+updateCalcOptions();
 </script>
 
 <div id="agent-panel" style="margin:20px auto;max-width:720px;border:2px solid #4a90d9;border-radius:12px;padding:16px;background:#f7fbff;font-family:system-ui">
-  <h3 style="margin:0 0 8px;color:#2c5d8f">🤖 万物生·生物专家团 · 智能体问答</h3>
-  <p style="font-size:13px;color:#555;margin:0 0 10px">点预设或直接输入问题，调用 万物生·生物专家团 的学科能力实时解答（在线时）。离线时显示"在线 AI 暂不可用，看站内题库"。</p>
+  <h3 style="margin:0 0 8px;color:#2c5d8f">🤖 万物生·生物专家团 · 智能体问答（本地题库模式）</h3>
+  <p style="font-size:13px;color:#555;margin:0 0 10px">本地题库模式（离线·零外链）：关键词匹配本站本地题库作答。在线 AI 问答待李老师定 key 策略后统一开通。</p>
   <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px"><button style="padding:6px 10px;border-radius:8px;border:1px solid #888;background:#fff;color:#333;cursor:pointer;font-size:12px" onclick="agentAsk('伴 X 隐性遗传\'母病子必病\'原理')">伴 X 隐性遗传'母病子必病'原理</button><button style="padding:6px 10px;border-radius:8px;border:1px solid #888;background:#fff;color:#333;cursor:pointer;font-size:12px" onclick="agentAsk('基因与 DNA 片段区别')">基因与 DNA 片段区别</button><button style="padding:6px 10px;border-radius:8px;border:1px solid #888;background:#fff;color:#333;cursor:pointer;font-size:12px" onclick="agentAsk('一道遗传系谱图题')">一道遗传系谱图题</button>
     <button style="padding:6px 12px;border-radius:8px;border:1px solid #4a90d9;background:#4a90d9;color:#fff;cursor:pointer" onclick="agentAsk('')">问 万物生·生物专家团</button>
   </div>
-  <textarea id="agent-q" placeholder="输入问题，点按钮问 万物生·生物专家团..." style="width:100%;height:60px;padding:8px;border:1px solid #ccc;border-radius:8px;font-size:14px"></textarea>
-  <button style="margin-top:8px;padding:8px 16px;border-radius:8px;border:none;background:#2c8a3d;color:#fff;cursor:pointer;font-size:14px" onclick="agentAsk(document.getElementById('agent-q').value)">提问</button>
+  <textarea id="agent-q" placeholder="输入问题，匹配 万物生·生物专家团 本地题库..." style="width:100%;height:60px;padding:8px;border:1px solid #ccc;border-radius:8px;font-size:14px;box-sizing:border-box"></textarea>
+  <button style="margin-top:8px;padding:8px 16px;border-radius:8px;border:none;background:#2c8a3d;color:#fff;cursor:pointer;font-size:14px" onclick="agentAsk(document.getElementById('agent-q').value)">匹配本地题库</button>
   <div id="agent-a" style="margin-top:12px;padding:12px;background:#fff;border-left:4px solid #2c8a3d;border-radius:6px;font-size:14px;min-height:40px;white-space:pre-wrap;color:#333">（等待回答）</div>
   <script>
-  var AGENT_API = {{base:"https://api.agnes-k2.com/v1", key:"", model:"agnes-flash"}};
-  function agentAsk(q){{
-    if(!q) q=document.getElementById('agent-q').value;
-    if(!q){{document.getElementById('agent-a').textContent='请输入问题';return;}}
-    var a=document.getElementById('agent-a'); a.textContent='\u23F3 万物生·生物专家团 思考中...';
-    fetch(AGENT_API.base+'/chat/completions',{{method:'POST',headers:{{'Content-Type':'application/json','Authorization':'Bearer '+AGENT_API.key}},
-      body:JSON.stringify({{model:AGENT_API.model,messages:[{{role:'system',content:'你是万物生·生物专家团，全学段生物含遗传+实验。回答要专业、准确、可核查，口语化带大白话。'}},{{role:'user',content:q}}],temperature:0.3}})
-    .then(function(r){{return r.json();}}).then(function(d){{
-      a.textContent=(d.choices&&d.choices[0]&&d.choices[0].message)?d.choices[0].message.content:'（无返回）';
-    }}).catch(function(e){{a.textContent='\u26A0 在线 AI 暂不可用('+e.message+')，看站内题库或稍后再试。';}});
-  }}
+  // 本地题库模式: 离线·零外链·无 key。在线(key 注入)待李老师定 key 策略后统一切, 此处 AGENT_MODE 为切换点。
+  var AGENT_MODE="local";
+  var AGENT_KB=(typeof window.AGENT_KB==="object"&&window.AGENT_KB)?window.AGENT_KB:[];
+  var LOCAL_TIPS=["遗传题先判显隐与染色体(常/性), 再逐个体核对表型。", "实验设对照(空白/相互); 结论要'现象+数据'双支撑。"];
+  function _kbTokens(q){
+    var t=[];
+    (q.toLowerCase().match(/[a-z0-9]+/g)||[]).forEach(function(x){t.push(x);});
+    q.replace(/[^\u4e00-\u9fff]/g,'').split('').forEach(function(c){t.push(c);});
+    return t;
+  }
+  function agentAsk(q){
+    if(!q)q=document.getElementById('agent-q').value;
+    if(!q){document.getElementById('agent-a').textContent='请输入问题';return;}
+    document.getElementById('agent-q').value=q;
+    var a=document.getElementById('agent-a');
+    var uniq=Array.from(new Set(_kbTokens(q)));
+    var hits=AGENT_KB.map(function(it){
+      var hay=((it.q||"")+" "+(it.a||"")).toLowerCase();
+      var n=uniq.filter(function(t){return hay.indexOf(t)>-1;}).length;
+      return {s:n,it:it};
+    }).filter(function(x){return x.s>=Math.min(uniq.length,2);}).sort(function(x,y){return y.s-x.s;}).slice(0,3);
+    if(hits.length){
+      a.textContent="\u{1F4D6} 本地题库 · 离线（万物生·生物专家团 本地条目）\n\n"+hits.map(function(h){return "Q: "+h.it.q+"\nA: "+h.it.a;}).join("\n\n")+"\n\n（在线 AI 问答待李老师定 key 策略后开通）";
+    } else {
+      a.textContent="\u26A0\uFE0F 本地题库模式（离线）：未匹配到本地条目。在线 AI 问答待李老师定 key 策略后开通。\n学习提示：\n- "+LOCAL_TIPS.join("\n- ")+"\n并见站内【题库/知识】模块。";
+    }
+  }
   </script>
 </div>
 </body>
